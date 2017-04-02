@@ -1,13 +1,5 @@
 'use strict';
 
-function createObjectsArray(...objects){
-    let objectsArray = [];
-    for(let i=0; i<objects.length;i++){
-        objectsArray[i]=objects[i];
-    }
-    return objectsArray;
-}
-
 function findUnique(objects, filterObjects){
     let checkEqualsArray;
     let uniqueObjects= [];
@@ -36,5 +28,9 @@ function isEquals(currentObject, object, filterObject) {
     return currentObject[filterObject]===object[filterObject];
 }
 
-findUnique(createObjectsArray({'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'a':2}, {'a':1}), 'a');
-findUnique(createObjectsArray({'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'a':2}, {'a':1}), ['a', 'b']);
+findUnique([{'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'b':2, 'c':0}, {'a':2}, {'a':1}], 'a');
+findUnique([{'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'b':2, 'c':0}, {'a':2}, {'a':1}], ['a', 'b']);
+findUnique([{'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'b':2, 'c':0}, {'a':2}, {'a':1}], ['f']);
+findUnique([{'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'b':2, 'c':0}, {'a':2}, {'a':1}], ['c']);
+findUnique([{'a':1, 'b':2, 'c':3}, {'a':4, 'c':0}, {'b':2, 'c':0}, {'a':2}, {'a':1}], []);
+findUnique([{'a':4, 'c':0}, {'a':1,'b':2, 'c':3}, {'a':2}, {'a':1, 'b':2, 'c':3}, {'a':1}], ['a','b', 'c']);
