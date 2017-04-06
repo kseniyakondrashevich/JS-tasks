@@ -7,7 +7,7 @@
 function workWithLocalStorage(){
 
     function get(key){
-        return !!(localStorage[key]) ? JSON.parse(localStorage[key]) : undefined;
+        return localStorage[key]!==undefined ? JSON.parse(localStorage[key]) : undefined;
     }
 
     function getAll() {
@@ -19,7 +19,7 @@ function workWithLocalStorage(){
     }
     
     function set(key, value) {
-        if(key!=undefined && !isNaN(key)){
+        if(value!=undefined && !isNaN(value)){
             localStorage[key] = JSON.stringify(value);
             return true;
         }
@@ -39,7 +39,7 @@ function workWithLocalStorage(){
     }
 
     function add(objects) {
-        if([].length!=0) {
+        if(objects.length!=0) {
             objects.forEach(function (element) {
                 for (let key in element) {
                     set(key, element[key]);
