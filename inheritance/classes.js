@@ -2,26 +2,28 @@
  * Created by User on 12.04.2017.
  */
 
+'use strict';
+
 class Kingdom {
     constructor(kingdomName, isSimple, isAutotrophic){
         this._kingdomName = kingdomName;
         this._simple = isSimple;
         this._autotrophic = isAutotrophic;
-    };
+    }
 
     getKingdom () {
         return this._kingdomName;
-    };
+    }
 
     getInfo () {
         console.log('Царство: ' + this.getKingdom() + '\n' +
             'Простой: ' + Kingdom.toString(this._simple) + '\n' +
             'Автотрофный: ' + Kingdom.toString(this._autotrophic) + '\n');
-    };
+    }
 
     static toString(booleanValue) {
         return !!booleanValue ? 'Да' : 'Нет';
-    };
+    }
 }
 
 
@@ -30,11 +32,11 @@ class Class extends Kingdom {
     constructor(kingdomName, isSimple, isAutotrophic, className){
         super(kingdomName, isSimple, isAutotrophic);
         this._className = className;
-    };
+    }
 
     getClass() {
         return this._className;
-    };
+    }
 
     getInfo() {
         super.getInfo();
@@ -50,19 +52,19 @@ class Species extends Class {
     this._habitat = habitat;
     this._predatory = isPredatory;
     this._lifeSpan =0;
-    };
+    }
 
     setLifeSpan(value) {
         this._lifeSpan = value;
-    };
+    }
 
     getLifeSpan () {
         return this._lifeSpan;
-    };
+    }
 
     getSpicies() {
         return this._speciesName;
-    };
+    }
 
     getInfo() {
         super.getInfo();

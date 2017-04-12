@@ -32,6 +32,8 @@ setLifespan – установить продолжительность жизн
 - Используя class
 Реализовать приватные приватные свойства, защищённые свойства, переопределение метода.*/
 
+'use strict';
+
 function Kingdom(kingdomName, isSimple, isAutotrophic){
     this._kingdomName = kingdomName;
     this._simple = isSimple;
