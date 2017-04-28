@@ -1,38 +1,82 @@
-
 let Shower = function () {
     
     function showForm() {
         document.getElementsByTagName('body')[0].appendChild(Creater.createForm());
-        document.getElementsByTagName('fieldset')[0].appendChild(Creater.costructForm());
+        document.getElementsByTagName('fieldset')[0].appendChild(Creater.constructForm());
+        Modifier.modifyControls();
     }
     
     function showButton() {
-        Creater.initHtml();
-        let button = Creater.createButton('Сгенерировать форму');
-        document.getElementsByTagName('body')[0].appendChild(button);
-        button.addEventListener('click', function () {
-            document.getElementsByTagName('body')[0].removeChild(button);
-            showForm();
+        $(document).ready(function () {
+            let button = Creater.createButton('Сгенерировать форму');
+            document.getElementsByTagName('body')[0].appendChild(button);
+            Modifier.modifyControls();
+            button.addEventListener('click', function () {
+                document.getElementsByTagName('body')[0].removeChild(button);
+                showForm();
+            });
         });
     }
 
+    let Modifier = function () {
+
+        function modifyButtons() {
+            $('button').addClass('ui-button ui-widget ui-corner-all').button();
+        }
+        
+        function modifyInputToAutocomplete() {
+            $('input[name = "university"]').on('change', Creater.changeOptions).autocomplete({
+                source: ['БГУИР', 'БНТУ', 'БГУ']
+            });
+        }
+
+        function modifySelects() {
+            $('select').selectmenu();
+        }
+
+        function modifyRadioAndChecks() {
+            $('.radioInputs').checkboxradio();
+        }
+
+        function modifyNumber() {
+            let course =  $('input[name = "course"]');
+            course.attr('readOnly', 'true');
+            let slider = $('#slider');
+            slider.slider({
+                range: "max",
+                min: 1,
+                max: 5,
+                value: 1,
+                slide: function( event, ui ) {
+                    course.val( ui.value );
+                }
+            });
+            course.val( slider.slider( "value" ) );
+        }
+
+        function modifyInputToDatePicker() {
+            $('input[name = "datePicker"]').datepicker();
+        }
+
+        function modifyControls() {
+            modifyButtons();
+            modifyInputToAutocomplete();
+            modifySelects();
+            modifyRadioAndChecks();
+            modifyNumber();
+            modifyInputToDatePicker();
+        }
+
+        return{
+            modifyControls : modifyControls
+        }
+    }();
+
     let Creater = function () {
 
-        const bsuir =['ИЭФ','КСиС', 'ФИТиУ', 'ФРЭ', 'ФКП'];
-        const bntu = ['АТФ', 'МСФ', 'ФТУГ', 'ЭФ', 'ПСФ'];
-        const bsu = ['ММФ', 'ФФ', 'ВФ', 'БФ', 'ЮФ'];
-
-        function initHtml() {
-            const html = '<!DOCTYPE html>' +
-                '<html>' +
-                '<head>' +
-                '<link rel="stylesheet" href="style.css">' +
-                '</head>' +
-                '<body>' +
-                '</body>' +
-                '</html>';
-            document.write(html);
-        }
+        const bsuir =['ИЭФ','КСиС', 'ФИТиУ', 'ФКП', 'ФТК'];
+        const bntu = ['ФПМ', 'ЮФ', 'ФФ', 'АФ', 'ФММП'];
+        const bsu = ['ФМП', 'ФТИ', 'ФФ', 'ФАТ', 'ФТИ'];
 
         function createForm() {
             let form = document.createElement('form');
@@ -44,6 +88,7 @@ let Shower = function () {
         function createInput(name, type, className, value) {
             let input = document.createElement('input');
             input.setAttribute('name', name);
+            if(type)
             input.setAttribute('type', type);
             if(value)
                 input.setAttribute('value', value);
@@ -62,7 +107,6 @@ let Shower = function () {
             let button = document.createElement('button');
             if(type)
                 button.setAttribute('type', type);
-            button.classList.add('buttons');
             button.appendChild(document.createTextNode(text));
             return button;
         }
@@ -100,91 +144,101 @@ let Shower = function () {
             return textArea;
         }
 
-        function costructForm() {
+        function createDiv(id) {
+            let div = document.createElement('div');
+            div.setAttribute('id', id);
+            return div;
+        }
+
+        function constructForm() {
 
             let fragment = document.createDocumentFragment();
 
-            let label = Creater.createLabel('Введите фамилию:');
-            let input = Creater.createInput('surname', 'text', 'textInputs');
+            let label = createLabel('Фамилия');
+            let input = createInput('surname', 'text', 'textInputs');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Введите имя:');
-            input = Creater.createInput('name', 'text', 'textInputs');
+            label = createLabel('Имя');
+            input = createInput('name', 'text', 'textInputs');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Введите отчество:');
-            input = Creater.createInput('lastName', 'text', 'textInputs');
+            label = createLabel('Отчество');
+            input = createInput('lastName', 'text', 'textInputs');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Мужской');
-            input = Creater.createInput('pol', 'radio', 'radioInputs', 'Мужской');
+            label = createLabel('Мужской');
+            input = createInput('sex', 'radio', 'radioInputs', 'Мужской');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Женский');
-            input = Creater.createInput('pol', 'radio', 'radioInputs', 'Женский');
+            label = createLabel('Женский');
+            input = createInput('sex', 'radio', 'radioInputs', 'Женский');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Выберите университет:');
-            input = Creater.createSelect('university', ['', 'БГУиР', 'БНТУ', 'БГУ'], 'university');
-            input.onchange = changeOptions;
+            label = createLabel('Университет');
+            input = createInput('university', 'text', 'textInputs');
+            input.addEventListener('change', changeOptions);
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Выберите факультет:');
-            input = Creater.createSelect('faculty', [], 'faculty');
+            label = createLabel('Факультет');
+            input = createSelect('faculty', [], 'faculty');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Укажите курс:');
-            input = Creater.createInput('course', 'number', 'textInputs');
+            label = createLabel('Курс');
+            input = createInput('course', 'number', 'textInputs');
+            label.appendChild(input);
+            input = createDiv('slider');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('Заочно');
-            input = Creater.createInput('InAbsentia', 'checkbox', 'radioInputs', 'Да');
+            label = createLabel('Заочное');
+            input = createInput('InAbsentia', 'checkbox', 'radioInputs', 'Да');
             label.appendChild(input);
             fragment.appendChild(label);
 
-            label = Creater.createLabel('О себе...');
-            input = Creater.createTextArea('about', 40, 4);
+            label = createLabel('О себе...');
+            input = createTextArea('about', 40, 4);
             label.appendChild(input);
             fragment.appendChild(label);
 
-            input = Creater.createButton('Показать', 'submit');
-            input.onclick = WorkerWithData.pickUpData;
-            //input.addEventListener('click', WorkerWithData.pickUpData());
+            label = createLabel('Дата рождения');
+            input = createInput('datePicker', 'text', 'textInputs');
+            label.appendChild(input);
+            fragment.appendChild(label);
+
+            input = createButton('Отправить', 'submit');
+            input.addEventListener('click', WorkerWithData.pickUpData);
             fragment.appendChild(input);
 
-            input = Creater.createButton('Очистить', 'reset');
+            input = createButton('Очистить', 'reset');
             fragment.appendChild(input);
 
             return fragment;
         }
 
         function changeOptions() {
-            const select = document.getElementsByTagName('select')[0];
-            const options = document.getElementsByClassName('university');
-            const index = select.selectedIndex;
-            let nextSelect = document.getElementsByTagName('select')[1];
-            let nextOptions = document.getElementsByClassName('faculty');
+            const value = $('input[name = "university"]').val();
+            let nextSelect = $('select')[0];
+            let nextOptions = $('select > option');
 
             for(let i=nextOptions.length-1; i>=0 ;i--){
                 nextSelect.removeChild(nextOptions[i]);
             }
             let array = [];
-            switch (index){
-                case 1:
+            switch (value){
+                case 'БГУИР':
                     array = createOptions(bsuir, 'faculty');
                     break;
-                case 2:
+                case 'БНТУ':
                     array = createOptions(bntu, 'faculty');
                     break;
-                case 3:
+                case 'БГУ':
                     array = createOptions(bsu, 'faculty');
                     break;
             }
@@ -193,14 +247,14 @@ let Shower = function () {
         }
 
         return{
-            initHtml : initHtml,
+            changeOptions : changeOptions,
             createForm : createForm,
             createInput : createInput,
             createLabel : createLabel,
             createButton : createButton,
             createSelect : createSelect,
             createTextArea : createTextArea,
-            costructForm : costructForm,
+            constructForm : constructForm,
         }
 
     }();
@@ -241,15 +295,16 @@ let WorkerWithData = function () {
     }
 
     function showData() {
-        const result = 'Фамилия: ' + textsValues[0] + '\n' +
-            'Имя: ' + textsValues[1] + '\n' +
-            'Отчество: ' + textsValues[2] + '\n' +
+        const result = 'Фамилия ' + textsValues[0] + '\n' +
+            'Имя ' + textsValues[1] + '\n' +
+            'Отчество ' + textsValues[2] + '\n' +
             'Пол: ' + checksValues[0] + '\n' +
-            'Университет: ' + selectValues[0] +  '\n' +
+            'Университет: ' + textsValues[3] +  '\n' +
             'Факультет: ' + selectValues[1] + '\n' +
-            'Курс: ' + textsValues[3] + '\n' +
-            'Заочно: ' + !!checksValues[1] + '\n' +
-            'О себе: ' + textsValues[4];
+            'Курс: ' + textsValues[4] + '\n' +
+            'Заочное ' + !!checksValues[1] + '\n' +
+            'О себе ' + textsValues[5] + '\n' +
+            'Дата рождения ' +textsValues[6];
 
         alert(result);
     }
