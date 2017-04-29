@@ -1,11 +1,11 @@
 let Shower = function () {
-    
+
     function showForm() {
         document.getElementsByTagName('body')[0].appendChild(Creater.createForm());
         document.getElementsByTagName('fieldset')[0].appendChild(Creater.constructForm());
         Modifier.modifyControls();
     }
-    
+
     function showButton() {
         $(document).ready(function () {
             let button = Creater.createButton('Сгенерировать форму');
@@ -23,12 +23,15 @@ let Shower = function () {
         function modifyButtons() {
             $('button').addClass('ui-button ui-widget ui-corner-all').button();
         }
-        
+
         function modifyInputToAutocomplete() {
-            $('input[name = "university"]').on('change', Creater.changeOptions).autocomplete({
-                source: ['БГУИР', 'БНТУ', 'БГУ']
+            $('input[name = "university"]').autocomplete({
+                source: ['БГУИР', 'БНТУ', 'БГУ'],
+                select: function(){alert(1);}
             });
         }
+
+
 
         function modifySelects() {
             $('select').selectmenu();
@@ -89,7 +92,7 @@ let Shower = function () {
             let input = document.createElement('input');
             input.setAttribute('name', name);
             if(type)
-            input.setAttribute('type', type);
+                input.setAttribute('type', type);
             if(value)
                 input.setAttribute('value', value);
             input.classList.add(className);
@@ -181,7 +184,6 @@ let Shower = function () {
 
             label = createLabel('Университет');
             input = createInput('university', 'text', 'textInputs');
-            input.addEventListener('change', changeOptions);
             label.appendChild(input);
             fragment.appendChild(label);
 
@@ -244,6 +246,7 @@ let Shower = function () {
             }
             for(let i=0; i<array.length;i++)
                 nextSelect.appendChild(array[i]);
+            $('select').selectmenu('refresh');
         }
 
         return{
@@ -300,7 +303,7 @@ let WorkerWithData = function () {
             'Отчество ' + textsValues[2] + '\n' +
             'Пол: ' + checksValues[0] + '\n' +
             'Университет: ' + textsValues[3] +  '\n' +
-            'Факультет: ' + selectValues[1] + '\n' +
+            'Факультет: ' + selectValues[0] + '\n' +
             'Курс: ' + textsValues[4] + '\n' +
             'Заочное ' + !!checksValues[1] + '\n' +
             'О себе ' + textsValues[5] + '\n' +
